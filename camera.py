@@ -1,4 +1,5 @@
 import cv2 as cv
+from cv2 import imshow
 
 class Camera:
 
@@ -7,9 +8,6 @@ class Camera:
         
         if not self.camera.isOpened():
             raise ValueError('Unable to open the Camera! :( ')
-        
-        self.width = self.camera.get(cv.CAP_PROP_FRAME_WIDTH)
-        self.height = self.camera.get(cv.CAP_PROP_FRAME_HEIGHT)
         
     def __del__(self):
         if self.camera.isOpened():

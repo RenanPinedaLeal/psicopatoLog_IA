@@ -1,7 +1,11 @@
 import pickle
+from pyexpat import model
 import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
+import numpy as np
+import cv2 as cv
+import PIL
 
 class Model:
     
@@ -29,4 +33,17 @@ class Model:
         
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         
-        model.fit(train, test, epochs=2, batch_size=32, validation_split=0.1)
+        model.fit(train, test, epochs=1, batch_size=32, validation_split=0.1)
+        
+"""     def predict(frame):
+        frame = frame[1]
+        cv.imwrite("frame.jpg", cv.cvtColor(frame, cv.COLOR_RGB2GRAY))
+        img = PIL.Image.open("frame.jpg")
+        img.thumbnail((150, 150), PIL.Image.ANTIALIAS)
+        img.save("frame.jpg")
+
+        img = cv.imread('frame.jpg')[:, :, 0]
+        img = img.reshape(16800)
+        prediction = model.predict([img])
+
+        return prediction[0] """

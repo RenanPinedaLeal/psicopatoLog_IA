@@ -1,9 +1,7 @@
 import app
-import model
 
 def main():
-     #app.App(window_title="Camera Classifier v0.1 Alpha")
-     model.Model()
+    app.App()
 
 if __name__ == "__main__":
-    main() 
+    main()
