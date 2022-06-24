@@ -1,21 +1,29 @@
+from tabnanny import verbose
 import tkinter as tk
 from tkinter import simpledialog
 import cv2 as cv
+from keras.models import Sequential, save_model, load_model
+import numpy as np
 import os
 import PIL.Image, PIL.ImageTk
-import cv2
 from cv2 import WND_PROP_VISIBLE
-import camera
-import model
 
 class App:
 
     def __init__(self):      
 
         cam = cv.VideoCapture(0)
-        classif = cv.CascadeClassifier('other_data/haarcascade_frontalface_default.xml')
         
+        IMG_SIZE = 38
+        pred = []
+        classif = cv.CascadeClassifier('other_data/haarcascade_frontalface_default.xml')
+        filepath = './saved_model'
+        model = load_model(filepath, compile = True)
+                
+        i = 0
         while True:
+            i+=1
+            
             ref, frame = cam.read()
             
             cv.imshow('cam', frame)
@@ -28,15 +36,38 @@ class App:
             gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
             faces = classif.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3)
             
+            
             for x,y,w,h in faces:
-                """ 
                 face = gray[y: y+h, x: x+w]
                 
-                if face.shape[0] >= 200 and face.shape[1] >= 200:
-                    face = cv.resize(face, (48, 48)) """
+                if len(faces) != 0:
                     
-                cv.rectangle(frame, (x,y), (x+w, y+h), (0,0,255), thickness=3)
+                    pred = np.array(pred, face)
+                    pred = np.array(pred).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+
+                    predicts = model.predict(x=pred, batch_size=10, verbose=0)
+                    
+                    for aux in predicts:
+                        print(aux)
+
+                    
+                    """ prediction_img = []
+                    prediction_img[0].reshape((48, 48))
+                    
+                    sample_to_predict = []
+                    sample_to_predict.append(prediction_img[0]) """
+                    
+                    
+                    
+                    print(i)
+                else:
+                    print(-i)
+                
+                if face.shape[0] >= 200 and face.shape[1] >= 200:
+                    face = cv.resize(face, (48, 48))
+                    
             
+
             
             
         cam.release()
