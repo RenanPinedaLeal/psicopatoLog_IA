@@ -1,40 +1,30 @@
 import pickle
+from pickletools import optimize
 from pyexpat import model
+from sklearn import metrics
 import tensorflow as tf
+from tensorflow import keras
 from keras.models import Sequential, save_model, load_model
+from keras.applications import MobileNetV2
 from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
 import numpy as np
 import cv2 as cv
 import PIL
 
-class Model:
-    
-    def __init__(self):
-        train = pickle.load(open('train.pickle', 'rb'))
-        test = pickle.load(open('test.pickle', 'rb'))
-            
-        train = train/255.0
-        test = test/255.0
-            
-        model = Sequential()
-            
-        model.add(Conv2D(64, (3,3), input_shape = train.shape[1:]))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2,2)))
-            
-        model.add(Conv2D(64, (3,3)))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2,2)))
-            
-        model.add(Flatten())
-        model.add(Dense(64))
-            
-        model.add(Dense(1))
-        model.add(Activation('sigmoid'))
-            
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-            
-        model.fit(train, test, epochs=4, batch_size=32, validation_split=0.1)
 
-        filepath = './saved_model'
-        save_model(model, filepath)
+class Model:
+
+    model = MobileNetV2()
+                
+    base_input = model.layers[0].input
+    base_output = model.layers[-2].output
+
+    final_output = Dense(128)(base_output)
+    final_ouput = Activation('relu')(final_output)
+    final_output = Dense(64)(final_ouput)
+    final_ouput = Activation('relu')(final_output)
+    final_output = Dense(7, activation='softmax')(final_ouput)
+    
+    new_model = keras.Model(inputs = base_input, outputs = final_output)
+    
+    new_model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
