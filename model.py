@@ -30,8 +30,10 @@ class Model:
         
     while aux_emo <= 6:
         #print(CATEGORIES[aux_emo])
-                
-        aux_secemo = aux_already_gone
+        if (aux_emo == 0):
+            aux_secemo = aux_already_gone + 3
+        else:        
+            aux_secemo = aux_already_gone
             
         while aux_secemo <= 6:
             if(aux_secemo != aux_emo):
