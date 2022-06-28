@@ -1,11 +1,8 @@
-from keras.models import load_model
-
-from cv2 import WND_PROP_VISIBLE
-
 import numpy as np
 from keras.models import load_model
+from keras.models import load_model
 import cv2 as cv
-
+from cv2 import WND_PROP_VISIBLE
 
     
 IMG_SIZE = 244
