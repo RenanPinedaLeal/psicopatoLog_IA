@@ -59,6 +59,12 @@ class App:
                 print('-------------------')
                 #print(np.argmax(self.cont))
                 print('most predominant emotion: ' + self.CATEGORIES[np.argmax(np.array(self.cont))])
+                
+                aux_cont = 0
+                for category in self.CATEGORIES:
+                    print(category + ': ' + str(self.cont[aux_cont]))
+                    aux_cont += 1
+                
                 break
         
                 
@@ -91,6 +97,6 @@ class App:
             
             pred = self.model.predict(final_img)
             
-            print(pred[0])
+            #print(pred[0])
             print(self.CATEGORIES[np.argmax(pred)])
             self.cont[np.argmax(pred)] += 1
