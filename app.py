@@ -1,4 +1,5 @@
 from multiprocessing.spawn import prepare
+from sre_parse import CATEGORIES
 from tabnanny import check, verbose
 import tkinter as tk
 from tkinter import simpledialog
@@ -21,6 +22,7 @@ class App:
     
     IMG_SIZE = 244
     CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
+    cont = [0, 0, 0, 0, 0, 0, 0]
     face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')
     aux_emo = 0
     aux_secemo = 1
@@ -28,8 +30,9 @@ class App:
         
     #print(filepath)
         
-    model = load_model(filepath) #load_model(filepath + CATEGORIES[aux_emo] + '_' + CATEGORIES[aux_secemo] + '/', compile = True)
-        
+    #model = load_model(filepath)
+    model = load_model('./saved_model/all_emotions.h5')
+   
 
     def __init__(self):      
 
@@ -42,20 +45,26 @@ class App:
             #take frame
             ref, frame = cam.read()
 
+            if frame.any() == None:
+                return
+
             cv.imshow('cam', frame)
             
-            self.pred(frame= frame)
+            self.pred(frame = frame)
 
             key = cv.waitKey(1)
 
             #close window
             if cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0:
+                print('-------------------')
+                #print(np.argmax(self.cont))
+                print('most predominant emotion: ' + self.CATEGORIES[np.argmax(np.array(self.cont))])
                 break
         
                 
     def pred(self, frame ):
 
-        frame = cv.imread("frame2.jpg")
+        #frame = cv.imread("frame2.jpg")
         #print(frame.shape)
         
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -70,15 +79,18 @@ class App:
             roi_img = cv.cvtColor(roi_gray, cv.COLOR_BGR2RGB)
             #print(roi_img.shape)
 
-        if(len(roi_img) == 0):
-            return
-        
-        
-        final_img = cv.resize(roi_img, (224, 224))
-        final_img = np.expand_dims(final_img, axis=0)
-        
-        final_img = final_img/255.0
-        
-        pred = self.model.predict(final_img)
-        
-        print(np.argmax(pred))
+            if(len(roi_img) == 0):
+                return
+            
+            
+            
+            final_img = cv.resize(roi_img, (224, 224))
+            final_img = np.expand_dims(final_img, axis=0)
+            
+            final_img = final_img/255.0
+            
+            pred = self.model.predict(final_img)
+            
+            print(pred[0])
+            print(self.CATEGORIES[np.argmax(pred)])
+            self.cont[np.argmax(pred)] += 1
