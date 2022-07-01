@@ -22,6 +22,18 @@ m_04 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[4] + '.h5'
    
 cam = cv.VideoCapture(0)
 
+def most_frequent(List):
+    counter = 0
+    num = List[0]
+     
+    for i in List:
+        curr_frequency = List.count(i)
+        if(curr_frequency> counter):
+            counter = curr_frequency
+            num = i
+ 
+    return num
+
 def predict():
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
@@ -42,18 +54,20 @@ def predict():
                 
         final_img = final_img/255.0
         
-        pred = np.bincount([np.argmax(m_01.predict(final_img)), 
+        pred = [np.argmax(m_01.predict(final_img)), 
                             np.argmax(m_02.predict(final_img)), 
                             np.argmax(m_03.predict(final_img)), 
-                            np.argmax(m_04.predict(final_img))])
-                        
-        print(CATEGORIES[pred.argmax()])
-        print(pred.argmax())
-        #print(pred[0])
-        #print(pred[1])
-        #print(pred[2])
-        #print(pred[3])
-        cont[pred.argmax()] += 1
+                            np.argmax(m_04.predict(final_img))]
+
+        final_pred = most_frequent(pred)
+        
+        print(CATEGORIES[final_pred])
+        print(final_pred)
+        print(pred[0])
+        print(pred[1])
+        print(pred[2])
+        print(pred[3]) 
+        cont[final_pred] += 1
 
 i = 0
 while True:
