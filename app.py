@@ -34,16 +34,13 @@ while True:
     
     #predict            
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-        #print(gray.shape)
 
     faces = face_finder.detectMultiScale(gray, 1.1, 4)
             
     for x,y,w,h in faces:
         roi_gray = gray[y: y+h, x: x+w]
-        #print(roi_gray.shape)
                 
         roi_img = cv.cvtColor(roi_gray, cv.COLOR_BGR2RGB)
-        #print(roi_img.shape)
 
         if(len(roi_img) == 0):
             pass
@@ -55,7 +52,6 @@ while True:
                 
         pred = model.predict(final_img)
                 
-        #print(pred[0])
         print(CATEGORIES[np.argmax(pred)])
         cont[np.argmax(pred)] += 1
     #finished predict    
@@ -65,7 +61,6 @@ while True:
     #close window
     if cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0:
         print('-------------------')
-        #print(np.argmax(self.cont))
         print('most predominant emotion: ' + CATEGORIES[np.argmax(np.array(cont))])
             
         aux_cont = 0
