@@ -11,14 +11,49 @@ cont = [0, 0, 0, 0, 0, 0, 0]
 face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')
 aux_emo = 0
 aux_secemo = 1
-filepath = './saved_model/' + CATEGORIES[aux_emo] + '_' + CATEGORIES[aux_secemo] + '.h5'
-        
+
+m_01 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[1] + '.h5')
+m_02 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[2] + '.h5')
+m_03 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[3] + '.h5')
+m_04 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[4] + '.h5')
 #print(filepath)
         
-#model = load_model(filepath)
-model = load_model('./saved_model/all_emotions.h5')
+#model = load_model('./saved_model/all_emotions.h5')
    
 cam = cv.VideoCapture(0)
+
+def predict():
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+    faces = face_finder.detectMultiScale(gray, 1.1, 4)
+            
+    for x,y,w,h in faces:
+        roi_gray = gray[y: y+h, x: x+w]
+                
+        roi_img = cv.cvtColor(roi_gray, cv.COLOR_BGR2RGB)
+
+        if(len(roi_img) == 0):
+            pass
+        
+        #cv.imshow('cam', roi_img)
+                
+        final_img = cv.resize(roi_img, (224, 224))
+        final_img = np.expand_dims(final_img, axis=0)
+                
+        final_img = final_img/255.0
+        
+        pred = np.bincount([np.argmax(m_01.predict(final_img)), 
+                            np.argmax(m_02.predict(final_img)), 
+                            np.argmax(m_03.predict(final_img)), 
+                            np.argmax(m_04.predict(final_img))])
+                        
+        print(CATEGORIES[pred.argmax()])
+        print(pred.argmax())
+        #print(pred[0])
+        #print(pred[1])
+        #print(pred[2])
+        #print(pred[3])
+        cont[pred.argmax()] += 1
 
 i = 0
 while True:
@@ -33,27 +68,7 @@ while True:
     cv.imshow('cam', frame)
     
     #predict            
-    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-
-    faces = face_finder.detectMultiScale(gray, 1.1, 4)
-            
-    for x,y,w,h in faces:
-        roi_gray = gray[y: y+h, x: x+w]
-                
-        roi_img = cv.cvtColor(roi_gray, cv.COLOR_BGR2RGB)
-
-        if(len(roi_img) == 0):
-            pass
-                
-        final_img = cv.resize(roi_img, (224, 224))
-        final_img = np.expand_dims(final_img, axis=0)
-                
-        final_img = final_img/255.0
-                
-        pred = model.predict(final_img)
-                
-        print(CATEGORIES[np.argmax(pred)])
-        cont[np.argmax(pred)] += 1
+    predict()
     #finished predict    
     
     key = cv.waitKey(1)
