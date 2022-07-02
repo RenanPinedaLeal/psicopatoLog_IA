@@ -16,8 +16,8 @@ DATADIR = 'train/'
 CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
 IMG_SIZE = 224
             
-aux_emo = 0
-aux_already_gone = 0
+aux_emo = 1
+aux_already_gone = 1
         
 #all_emotions
 training_data = []
@@ -27,8 +27,8 @@ init_test = [] #np.array([])
 #pair of emotions    
 while aux_emo <= 6:
     #print(CATEGORIES[aux_emo])
-    if (aux_emo == 0):
-        aux_secemo = aux_already_gone + 5
+    if (aux_emo == 1):
+        aux_secemo = aux_already_gone + 3
     else:        
         aux_secemo = aux_already_gone
                 
