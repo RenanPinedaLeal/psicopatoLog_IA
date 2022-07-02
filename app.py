@@ -16,6 +16,12 @@ m_01 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[1] + '.h5'
 m_02 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[2] + '.h5')
 m_03 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[3] + '.h5')
 m_04 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[4] + '.h5')
+m_05 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[5] + '.h5')
+m_06 = load_model('./saved_model/' + CATEGORIES[0] + '_' + CATEGORIES[6] + '.h5')
+
+m_12 = load_model('./saved_model/' + CATEGORIES[1] + '_' + CATEGORIES[2] + '.h5')
+m_13 = load_model('./saved_model/' + CATEGORIES[1] + '_' + CATEGORIES[3] + '.h5')
+
 #print(filepath)
         
 #model = load_model('./saved_model/all_emotions.h5')
@@ -57,7 +63,11 @@ def predict():
         pred = [np.argmax(m_01.predict(final_img)), 
                             np.argmax(m_02.predict(final_img)), 
                             np.argmax(m_03.predict(final_img)), 
-                            np.argmax(m_04.predict(final_img))]
+                            np.argmax(m_04.predict(final_img)),
+                            np.argmax(m_05.predict(final_img)),
+                            np.argmax(m_06.predict(final_img)),
+                            np.argmax(m_12.predict(final_img)),
+                            np.argmax(m_13.predict(final_img)),]
 
         final_pred = most_frequent(pred)
         
@@ -67,6 +77,11 @@ def predict():
         print(pred[1])
         print(pred[2])
         print(pred[3]) 
+        print(pred[4]) 
+        print(pred[5]) 
+        print(pred[6]) 
+        print(pred[7]) 
+
         cont[final_pred] += 1
 
 i = 0
