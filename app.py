@@ -72,15 +72,18 @@ def predict():
         final_pred = most_frequent(pred)
         
         print(CATEGORIES[final_pred])
+        
         print(final_pred)
-        print(pred[0])
-        print(pred[1])
-        print(pred[2])
-        print(pred[3]) 
-        print(pred[4]) 
-        print(pred[5]) 
-        print(pred[6]) 
-        print(pred[7]) 
+        
+        print(str(pred[0]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[1])
+        print(str(pred[1]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[2])
+        print(str(pred[2]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[3])
+        print(str(pred[3]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[4]) 
+        print(str(pred[4]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[5]) 
+        print(str(pred[5]) + ' | ' + CATEGORIES[0] + '_' + CATEGORIES[6]) 
+        
+        print(str(pred[6]) + ' | ' + CATEGORIES[1] + '_' + CATEGORIES[2]) 
+        print(str(pred[7]) + ' | ' + CATEGORIES[1] + '_' + CATEGORIES[3]) 
 
         cont[final_pred] += 1
 
