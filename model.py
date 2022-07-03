@@ -28,7 +28,7 @@ init_test = [] #np.array([])
 while aux_emo <= 6:
     #print(CATEGORIES[aux_emo])
     if (aux_emo == 1):
-        aux_secemo = aux_already_gone + 3
+        aux_secemo = aux_already_gone + 5
     else:        
         aux_secemo = aux_already_gone
                 
