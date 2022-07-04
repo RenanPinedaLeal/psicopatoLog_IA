@@ -18,7 +18,7 @@ aux_mod = 0
 for category in CATEGORIES:
     for category2 in CATEGORIES:
         if(os.path.exists('./saved_model/' + category + '_' + category2 + '.h5')):
-            print('found' + str(aux_mod))
+            print('--FOUND ' + str(aux_mod) + '--')
             models[aux_mod] = load_model('./saved_model/' + category + '_' + category2 + '.h5')
             aux_mod += 1
             
@@ -47,6 +47,15 @@ def most_frequent(List):
         
     for e in aux_ele:
         print(e)    
+    
+    if aux_ele[1] == 6:
+        return False
+    elif aux_ele[3] == 6:
+        return False
+    elif aux_ele[4] == 6:
+        return False
+    elif aux_ele[6] == 6:
+        return False    
     
     if aux_ele[0] >= limit:
         return True
@@ -82,7 +91,9 @@ def predict():
             if (mod != None):
                 pred[aux_pred] = np.argmax(mod.predict(final_img))
                 aux_pred += 1
-        
+            else:
+                print('--IS EMPTY--')
+            
         final_pred = most_frequent(pred)
         return final_pred
         
