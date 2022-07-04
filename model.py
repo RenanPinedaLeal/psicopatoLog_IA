@@ -16,7 +16,7 @@ DATADIR = 'train/'
 CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
 IMG_SIZE = 224
             
-aux_emo = 3
+aux_emo = 4
 aux_already_gone = aux_emo
         
 #all_emotions
