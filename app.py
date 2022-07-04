@@ -14,6 +14,7 @@ face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalfa
 
 models = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
 aux_mod = 0
+ansr_final = [0, 0]
 
 for category in CATEGORIES:
     for category2 in CATEGORIES:
@@ -70,7 +71,11 @@ def predict():
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     faces = face_finder.detectMultiScale(gray, 1.1, 4)
-            
+
+    if len(faces) == 0:    
+        print('--FACE NOT FOUND--')
+        
+    
     for x,y,w,h in faces:
         roi_gray = gray[y: y+h, x: x+w]
                 
@@ -111,14 +116,30 @@ while True:
     cv.imshow('cam', frame)
     
     #predict            
-    resp = predict()
+    ansr = predict()
     
-    if resp != None:
-        print(str(resp))
+    if ansr != None:
+        print(str(ansr))   
+        if ansr == True:
+            ansr_final[0] += 1
+        else:
+            ansr_final[1] += 1
     #finished predict    
     
     key = cv.waitKey(1)
 
     #close window
-    if cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0:                
+    if cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0:   
+        print('--------------')
+        print('True: ' + str(ansr_final[0]))             
+        print('False: ' + str(ansr_final[1]))             
+        print('--------------')
+        
+        if (ansr_final[0] == 0):
+            print(False)        
+        elif ansr_final[1]/ansr_final[0] < 1.5:
+            print(True)
+        else:
+            print(False)
+        
         break
