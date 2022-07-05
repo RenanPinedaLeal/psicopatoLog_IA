@@ -4,10 +4,12 @@ from keras.models import load_model
 import cv2 as cv
 from cv2 import WND_PROP_VISIBLE
 import os
+import time
 
     
 IMG_SIZE = 244
 CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
+
 cont = [0, 0, 0, 0, 0, 0, 0]
 face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
@@ -23,7 +25,7 @@ for category in CATEGORIES:
             models[aux_mod] = load_model('./saved_model/' + category + '_' + category2 + '.h5')
             aux_mod += 1
             
-   
+INIT_TIME = time.time()
 cam = cv.VideoCapture(0)
 
 def most_frequent(List):
@@ -45,6 +47,8 @@ def most_frequent(List):
             aux_ele[5] += 1
         elif ele == 6:
             aux_ele[6] += 1
+            
+    #os.system('cls')
         
     for e in aux_ele:
         print(e)    
@@ -67,7 +71,7 @@ def most_frequent(List):
     
     return False
 
-def predict():
+def predict(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     faces = face_finder.detectMultiScale(gray, 1.1, 4)
@@ -95,51 +99,56 @@ def predict():
         for mod in models:
             if (mod != None):
                 pred[aux_pred] = np.argmax(mod.predict(final_img))
+                #os.system('cls')
+
                 aux_pred += 1
             else:
                 print('--IS EMPTY--')
-            
+        
+        
         final_pred = most_frequent(pred)
         return final_pred
         
+def main(how_much):
+    i = 0
+    while True:
+        i+=1
 
-i = 0
-while True:
-    i+=1
+        #take frame
+        ref, frame = cam.read()
 
-    #take frame
-    ref, frame = cam.read()
+        if frame.any() == None:
+            break
 
-    if frame.any() == None:
-        break
-
-    cv.imshow('cam', frame)
-    
-    #predict            
-    ansr = predict()
-    
-    if ansr != None:
-        print(str(ansr))   
-        if ansr == True:
-            ansr_final[0] += 1
-        else:
-            ansr_final[1] += 1
-    #finished predict    
-    
-    key = cv.waitKey(1)
-
-    #close window
-    if cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0:   
-        print('--------------')
-        print('True: ' + str(ansr_final[0]))             
-        print('False: ' + str(ansr_final[1]))             
-        print('--------------')
+        cv.imshow('cam', frame)
         
-        if (ansr_final[0] == 0):
-            print(False)        
-        elif ansr_final[1]/ansr_final[0] < 1.5:
-            print(True)
-        else:
-            print(False)
+        #predict            
+        ansr = predict(frame)
         
-        break
+        if ansr != None:
+            print(str(ansr))   
+            if ansr == True:
+                ansr_final[0] += 1
+            else:
+                ansr_final[1] += 1
+        #finished predict    
+        
+        key = cv.waitKey(1)
+
+        #close window        
+        if (cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0) or (time.time() - INIT_TIME > how_much):   
+            print('--------------')
+            print('True: ' + str(ansr_final[0]))             
+            print('False: ' + str(ansr_final[1]))             
+            print('--------------')
+            
+            if (ansr_final[0] == 0):
+                print(False)        
+            elif ansr_final[1]/ansr_final[0] < 1.5:
+                print(True)
+            else:
+                print(False)
+            
+            break
+        
+main(20)
