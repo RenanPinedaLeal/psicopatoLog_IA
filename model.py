@@ -29,7 +29,7 @@ train = None
 while aux_emo <= 6:
     #print(CATEGORIES[aux_emo])
     if (aux_emo == 0):
-        aux_secemo = aux_already_gone + 3
+        aux_secemo = aux_already_gone + 4
     else:        
         aux_secemo = aux_already_gone
                 
