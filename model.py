@@ -16,19 +16,20 @@ DATADIR = 'train/'
 CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
 IMG_SIZE = 224
             
-aux_emo = 4
+aux_emo = 0
 aux_already_gone = aux_emo
         
 #all_emotions
 training_data = []
 init_train = [] #np.array([])
-init_test = [] #np.array([])             
+init_test = [] #np.array([])
+train = None             
             
 #pair of emotions    
 while aux_emo <= 6:
     #print(CATEGORIES[aux_emo])
     if (aux_emo == 3):
-        aux_secemo = aux_already_gone + 3
+        aux_secemo = aux_already_gone 
     else:        
         aux_secemo = aux_already_gone
                 
@@ -41,10 +42,10 @@ while aux_emo <= 6:
             init_train = [] #np.array([])
             init_test = [] #np.array([]) 
                     
-            path = glob.glob(DATADIR + CATEGORIES[aux_emo] + '/*.png')
+            path = glob.glob(DATADIR + CATEGORIES[aux_emo] + '/*.jpg')
             class_num = CATEGORIES.index(CATEGORIES[aux_emo])
                     
-            path_sec = glob.glob(DATADIR + CATEGORIES[aux_secemo] + '/*.png')
+            path_sec = glob.glob(DATADIR + CATEGORIES[aux_secemo] + '/*.jpg')
             class_num_sec = CATEGORIES.index(CATEGORIES[aux_secemo])
                                     
             for img in path:
@@ -65,7 +66,7 @@ while aux_emo <= 6:
                 except Exception as e:
                     pass
                         
-            #print(len(training_data))
+            print(len(training_data))
 
             random.shuffle(training_data)
                     
@@ -84,7 +85,7 @@ while aux_emo <= 6:
                                 
                 train = np.array(init_train).reshape(-1, IMG_SIZE, IMG_SIZE, 3)           
                     
-            print(train.shape)
+            #print(train.shape)
             #print(np.array(test).shape)
                     
             train = train/255.0
@@ -99,13 +100,13 @@ while aux_emo <= 6:
             final_ouput = Activation('relu')(final_output)
             final_output = Dense(64)(final_ouput)
             final_ouput = Activation('relu')(final_output)
-            final_output = Dense(7, activation='softmax')(final_ouput)
+            final_output = Dense(2, activation='softmax')(final_ouput)
                     
             new_model = keras.Model(inputs = base_input, outputs = final_output)
                     
             new_model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
                     
-            new_model.fit(train, test, epochs = 15)
+            new_model.fit(train, test, epochs = 5)
                         
             #filepath = './saved_model/' + CATEGORIES[aux_emo] + '_' + CATEGORIES[aux_secemo]
             #save_model(new_model, filepath)

@@ -15,6 +15,7 @@ face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalfa
 
 
 models = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
+
 aux_mod = 0
 ansr_final = [0, 0]
 
@@ -28,50 +29,34 @@ for category in CATEGORIES:
 INIT_TIME = time.time()
 cam = cv.VideoCapture(0)
 
-def most_frequent(List):
-    aux_ele = [0, 0, 0, 0, 0, 0, 0]
-    limit = 5
-    
-    for ele in List:
-        if ele == 0:
-            aux_ele[0] += 1
-        elif ele == 1:
-            aux_ele[1] += 1
-        elif ele == 2:
-            aux_ele[2] += 1
-        elif ele == 3:
-            aux_ele[3] += 1
-        elif ele == 4:
-            aux_ele[4] += 1
-        elif ele == 5:
-            aux_ele[5] += 1
-        elif ele == 6:
-            aux_ele[6] += 1
-            
+def most_frequent(aux_ele):
+    limit = 5            
     #os.system('cls')
-        
+    print(aux_ele)    
+
     for e in aux_ele:
-        print(e)    
     
-    if aux_ele[1] == 6:
-        return False
-    elif aux_ele[3] == 6:
-        return False
-    elif aux_ele[4] == 6:
-        return False
-    elif aux_ele[6] == 6:
-        return False    
-    
-    if aux_ele[0] >= limit:
-        return True
-    elif aux_ele[2] >= limit:
-        return True
-    elif aux_ele[5] >= limit:
-        return True
-    
+        if aux_ele[1] == 6:
+            return False
+        elif aux_ele[3] == 6:
+            return False
+        elif aux_ele[4] == 6:
+            return False
+        elif aux_ele[6] == 6:
+            return False    
+        
+        if aux_ele[0] >= limit:
+            return True
+        elif aux_ele[2] >= limit:
+            return True
+        elif aux_ele[5] >= limit:
+            return True
+        
     return False
 
 def predict(frame):
+    aux_ele = [0, 0, 0, 0, 0, 0, 0]
+
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     faces = face_finder.detectMultiScale(gray, 1.1, 4)
@@ -94,11 +79,45 @@ def predict(frame):
         final_img = final_img/255.0
         
         pred = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
+
         aux_pred = 0
         
         for mod in models:
             if (mod != None):
-                pred[aux_pred] = np.argmax(mod.predict(final_img))
+                pre_pred = np.argmax(mod.predict(final_img))
+                
+                if aux_pred == 0:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[1] += 1
+                elif aux_pred == 1:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[2] += 1
+                elif aux_pred == 2:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[3] += 1
+                elif aux_pred == 3:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[4] += 1
+                elif aux_pred == 4:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[5] += 1
+                elif aux_pred == 5:
+                    if pre_pred == 0:
+                        aux_ele[0] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1
+                
+                print(mod.predict(final_img))
                 #os.system('cls')
 
                 aux_pred += 1
@@ -106,7 +125,7 @@ def predict(frame):
                 print('--IS EMPTY--')
         
         
-        final_pred = most_frequent(pred)
+        final_pred = most_frequent(aux_ele)
         return final_pred
         
 def main(how_much):
@@ -151,4 +170,4 @@ def main(how_much):
             
             break
         
-main(20)
+main(40)
