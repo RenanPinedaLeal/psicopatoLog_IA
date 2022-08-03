@@ -116,6 +116,81 @@ def predict(frame):
                         aux_ele[0] += 1
                     elif pre_pred == 1:
                         aux_ele[6] += 1
+                elif aux_pred == 6:
+                    if pre_pred == 0:
+                        aux_ele[1] += 1
+                    elif pre_pred == 1:
+                        aux_ele[2] += 1
+                elif aux_pred == 7:
+                    if pre_pred == 0:
+                        aux_ele[1] += 1
+                    elif pre_pred == 1:
+                        aux_ele[3] += 1
+                elif aux_pred == 8:
+                    if pre_pred == 0:
+                        aux_ele[1] += 1
+                    elif pre_pred == 1:
+                        aux_ele[4] += 1
+                elif aux_pred == 9:
+                    if pre_pred == 0:
+                        aux_ele[1] += 1
+                    elif pre_pred == 1:
+                        aux_ele[5] += 1
+                elif aux_pred == 10:
+                    if pre_pred == 0:
+                        aux_ele[1] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1
+                elif aux_pred == 11:
+                    if pre_pred == 0:
+                        aux_ele[2] += 1
+                    elif pre_pred == 1:
+                        aux_ele[3] += 1
+                elif aux_pred == 12:
+                    if pre_pred == 0:
+                        aux_ele[2] += 1
+                    elif pre_pred == 1:
+                        aux_ele[4] += 1
+                elif aux_pred == 13:
+                    if pre_pred == 0:
+                        aux_ele[2] += 1
+                    elif pre_pred == 1:
+                        aux_ele[5] += 1
+                elif aux_pred == 14:
+                    if pre_pred == 0:
+                        aux_ele[2] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1
+                elif aux_pred == 15:
+                    if pre_pred == 0:
+                        aux_ele[3] += 1
+                    elif pre_pred == 1:
+                        aux_ele[4] += 1
+                elif aux_pred == 16:
+                    if pre_pred == 0:
+                        aux_ele[3] += 1
+                    elif pre_pred == 1:
+                        aux_ele[5] += 1
+                elif aux_pred == 17:
+                    if pre_pred == 0:
+                        aux_ele[3] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1
+                elif aux_pred == 18:
+                    if pre_pred == 0:
+                        aux_ele[4] += 1
+                    elif pre_pred == 1:
+                        aux_ele[5] += 1
+                elif aux_pred == 19:
+                    if pre_pred == 0:
+                        aux_ele[4] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1
+                elif aux_pred == 20:
+                    if pre_pred == 0:
+                        aux_ele[5] += 1
+                    elif pre_pred == 1:
+                        aux_ele[6] += 1                
                 
                 print(mod.predict(final_img))
                 #os.system('cls')

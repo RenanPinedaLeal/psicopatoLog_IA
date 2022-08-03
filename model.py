@@ -28,8 +28,8 @@ train = None
 #pair of emotions    
 while aux_emo <= 6:
     #print(CATEGORIES[aux_emo])
-    if (aux_emo == 3):
-        aux_secemo = aux_already_gone 
+    if (aux_emo == 0):
+        aux_secemo = aux_already_gone + 3
     else:        
         aux_secemo = aux_already_gone
                 
@@ -42,17 +42,17 @@ while aux_emo <= 6:
             init_train = [] #np.array([])
             init_test = [] #np.array([]) 
                     
-            path = glob.glob(DATADIR + CATEGORIES[aux_emo] + '/*.jpg')
+            path = glob.glob(DATADIR + CATEGORIES[aux_emo] + '/*.png')
             class_num = CATEGORIES.index(CATEGORIES[aux_emo])
                     
-            path_sec = glob.glob(DATADIR + CATEGORIES[aux_secemo] + '/*.jpg')
+            path_sec = glob.glob(DATADIR + CATEGORIES[aux_secemo] + '/*.png')
             class_num_sec = CATEGORIES.index(CATEGORIES[aux_secemo])
                                     
             for img in path:
                 try:
                     img_array = cv.imread(img)#, cv.COLOR_BGR2RGB)
                     new_array = cv.resize(img_array, (IMG_SIZE, IMG_SIZE))
-                    training_data.append([new_array, class_num])
+                    training_data.append([new_array, 0])
                     #print(os.path.join(path, img))
                 except Exception as e:
                     pass
@@ -61,7 +61,7 @@ while aux_emo <= 6:
                 try:
                     img_array = cv.imread(img)#, cv.COLOR_BGR2RGB)
                     new_array = cv.resize(img_array, (IMG_SIZE, IMG_SIZE))
-                    training_data.append([new_array, class_num_sec])
+                    training_data.append([new_array, 1])
                     #print(os.path.join(path, img))
                 except Exception as e:
                     pass
@@ -106,7 +106,7 @@ while aux_emo <= 6:
                     
             new_model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
                     
-            new_model.fit(train, test, epochs = 5)
+            new_model.fit(train, test, epochs = 10)
                         
             #filepath = './saved_model/' + CATEGORIES[aux_emo] + '_' + CATEGORIES[aux_secemo]
             #save_model(new_model, filepath)
