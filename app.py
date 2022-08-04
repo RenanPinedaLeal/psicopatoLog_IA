@@ -16,7 +16,7 @@ face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalfa
 
 models = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
 
-aux_mod = 0
+aux_mod = 1
 ansr_final = [0, 0]
 
 for category in CATEGORIES:
@@ -30,7 +30,7 @@ INIT_TIME = time.time()
 cam = cv.VideoCapture(0)
 
 def most_frequent(aux_ele):
-    limit = 5            
+    limit = 4            
     #os.system('cls')
     print(aux_ele)    
 
