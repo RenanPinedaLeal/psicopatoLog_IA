@@ -14,9 +14,9 @@ cont = [0, 0, 0, 0, 0, 0, 0]
 face_finder = cv.CascadeClassifier(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 
-models = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
+models = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
 
-aux_mod = 1
+aux_mod = 0
 ansr_final = [0, 0]
 
 for category in CATEGORIES:
@@ -25,6 +25,10 @@ for category in CATEGORIES:
             print('--FOUND ' + str(aux_mod) + '--')
             models[aux_mod] = load_model('./saved_model/' + category + '_' + category2 + '.h5')
             aux_mod += 1
+            
+models[aux_mod] = load_model('./saved_model/all_emotions.h5')
+print('--FOUND ' + str(aux_mod) + '--')
+
             
 INIT_TIME = time.time()
 cam = cv.VideoCapture(0)
@@ -36,14 +40,31 @@ def most_frequent(aux_ele):
 
     for e in aux_ele:
     
-        if aux_ele[1] == 6:
+        if aux_ele[1] >= 6:
             return False
-        elif aux_ele[3] == 6:
+        elif aux_ele[3] >= 6:
             return False
-        elif aux_ele[4] == 6:
-            return False
-        elif aux_ele[6] == 6:
+        elif aux_ele[6] >= 6:
             return False    
+        
+        elif aux_ele[4] >= 6:
+            print('Neutral')
+            aux_ele.pop(4)
+            aux_mostF = np.argmax(aux_ele)
+            print(aux_ele)
+            print(aux_mostF)
+            if(aux_mostF == 0):
+                return True
+            elif(aux_mostF == 1):
+                return False
+            elif(aux_mostF == 2):
+                return True
+            elif(aux_mostF == 3):
+                return False
+            elif(aux_mostF == 4):
+                return True
+            elif(aux_mostF == 5):
+                return False
         
         if aux_ele[0] >= limit:
             return True
@@ -78,8 +99,6 @@ def predict(frame):
                 
         final_img = final_img/255.0
         
-        pred = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None ]
-
         aux_pred = 0
         
         for mod in models:
@@ -191,6 +210,8 @@ def predict(frame):
                         aux_ele[5] += 1
                     elif pre_pred == 1:
                         aux_ele[6] += 1                
+                elif aux_pred == 21:
+                    aux_ele[pre_pred] += 1               
                 
                 print(mod.predict(final_img))
                 #os.system('cls')
