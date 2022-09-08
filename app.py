@@ -4,8 +4,6 @@ from keras.models import load_model
 import cv2 as cv
 from cv2 import WND_PROP_VISIBLE
 import os
-import time
-
     
 IMG_SIZE = 244
 CATEGORIES = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised']
@@ -30,7 +28,6 @@ models[aux_mod] = load_model('./saved_model/all_emotions.h5')
 print('--FOUND ' + str(aux_mod) + '--')
 
             
-INIT_TIME = time.time()
 cam = cv.VideoCapture(0)
 
 def most_frequent(aux_ele):
@@ -38,39 +35,52 @@ def most_frequent(aux_ele):
     #os.system('cls')
     print(aux_ele)    
 
-    for e in aux_ele:
-    
+    for _ in aux_ele:
         if aux_ele[1] >= 6:
+            cv.setWindowTitle('cam', 'disgusted')
             return False
         elif aux_ele[3] >= 6:
+            cv.setWindowTitle('cam', 'happy')
             return False
-        elif aux_ele[6] >= 6:
+        elif aux_ele[6] >= 7:
+            cv.setWindowTitle('cam', 'surprised')
             return False    
         
         elif aux_ele[4] >= 6:
             print('Neutral')
             aux_ele.pop(4)
+            aux_ele[5] -= 2
+            aux_ele[0] -= 1
             aux_mostF = np.argmax(aux_ele)
             print(aux_ele)
             print(aux_mostF)
             if(aux_mostF == 0):
+                cv.setWindowTitle('cam', 'N-angry')
                 return True
             elif(aux_mostF == 1):
+                cv.setWindowTitle('cam', 'N-disgusted')
                 return False
             elif(aux_mostF == 2):
+                cv.setWindowTitle('cam', 'N-fearful')
                 return True
             elif(aux_mostF == 3):
+                cv.setWindowTitle('cam', 'N-happy')
                 return False
             elif(aux_mostF == 4):
+                cv.setWindowTitle('cam', 'N-sad')
                 return True
             elif(aux_mostF == 5):
+                cv.setWindowTitle('cam', 'N-surprised')
                 return False
         
         if aux_ele[0] >= limit:
+            cv.setWindowTitle('cam', 'angry')
             return True
         elif aux_ele[2] >= limit:
+            cv.setWindowTitle('cam', 'fearful')
             return True
         elif aux_ele[5] >= limit:
+            cv.setWindowTitle('cam', 'sad')
             return True
         
     return False
@@ -224,7 +234,7 @@ def predict(frame):
         final_pred = most_frequent(aux_ele)
         return final_pred
         
-def main(how_much):
+def main():
     i = 0
     while True:
         i+=1
@@ -251,7 +261,7 @@ def main(how_much):
         key = cv.waitKey(1)
 
         #close window        
-        if (cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0) or (time.time() - INIT_TIME > how_much):   
+        if (cv.getWindowProperty('cam', WND_PROP_VISIBLE) == 0):   
             print('--------------')
             print('True: ' + str(ansr_final[0]))             
             print('False: ' + str(ansr_final[1]))             
@@ -266,4 +276,4 @@ def main(how_much):
             
             break
         
-main(40)
+main()
