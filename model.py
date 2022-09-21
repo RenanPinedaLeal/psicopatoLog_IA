@@ -1,15 +1,11 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import os
 import cv2 as cv
 import glob
 import random
 import tensorflow as tf
 from tensorflow import keras
-from keras.models import Sequential, save_model, load_model
 from keras.applications import MobileNetV2
-from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
-import PIL
+from keras.layers import Dense, Activation
 
         
 DATADIR = 'train/'
@@ -19,7 +15,6 @@ IMG_SIZE = 224
 aux_emo = 1
 aux_already_gone = aux_emo
         
-#all_emotions
 training_data = []
 init_train = [] #np.array([])
 init_test = [] #np.array([])
@@ -81,7 +76,7 @@ while aux_emo <= 6:
                 print(str(cont) + '/' + str(len(training_data)))
                 cont += 1
                 init_train.append(features)
-                init_test.append(label) # arrunasr
+                init_test.append(label)
                                 
                 train = np.array(init_train).reshape(-1, IMG_SIZE, IMG_SIZE, 3)           
                     
